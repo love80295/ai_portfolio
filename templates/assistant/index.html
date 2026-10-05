@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <title>{{ candidate.name|default:"AI Representative" }} · AI Representative</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+</head>
+<body>
+
+<div class="app">
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+            <div class="brand">
+                <div class="brand-logo">
+                    <span class="brand-logo-inner">AI</span>
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">Candidate AI</div>
+                    <div class="brand-sub">{{ candidate.name|default:"Representative" }}</div>
+                </div>
+            </div>
+
+            <button class="new-chat-btn" id="newChatBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>New chat</span>
+            </button>
+        </div>
+
+        <div class="sidebar-scroll">
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">AI TOOLS</div>
+                <button class="tool-item" data-q="Give me a brief professional summary of this candidate.">
+                    <span class="tool-icon">📄</span>
+                    <span class="tool-text">Resume overview</span>
+                </button>
+                <button class="tool-item" data-q="Suggest 5 interview questions you would ask this candidate based on their background.">
+                    <span class="tool-icon">💼</span>
+                    <span class="tool-text">Interview questions</span>
+                </button>
+                <button class="tool-item" data-q="What roles and job titles would be the best fit for this candidate based on their skills and projects?">
+                    <span class="tool-icon">🎯</span>
+                    <span class="tool-text">Role fit analysis</span>
+                </button>
+                <button class="tool-item" data-q="Why should we hire this candidate? Give concrete reasons from their resume.">
+                    <span class="tool-icon">⭐</span>
+                    <span class="tool-text">Why hire this candidate?</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">QUICK QUESTIONS</div>
+                <button class="tool-item" data-q="Tell me about yourself.">
+                    <span class="tool-icon">👋</span>
+                    <span class="tool-text">Tell me about yourself</span>
+                </button>
+                <button class="tool-item" data-q="What technical skills do you have?">
+                    <span class="tool-icon">🧠</span>
+                    <span class="tool-text">Technical skills</span>
+                </button>
+                <button class="tool-item" data-q="Explain your strongest project in detail.">
+                    <span class="tool-icon">🚀</span>
+                    <span class="tool-text">Strongest project</span>
+                </button>
+                <button class="tool-item" data-q="What technologies and tools have you worked with?">
+                    <span class="tool-icon">🛠</span>
+                    <span class="tool-text">Technologies</span>
+                </button>
+                <button class="tool-item" data-q="Tell me about your education and background.">
+                    <span class="tool-icon">🎓</span>
+                    <span class="tool-text">Education</span>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="status-dot"></div>
+            <div class="status-text">
+                <span class="status-title">AI representative online</span>
+                <span class="status-sub">Answers from verified resume only</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Backdrop for mobile -->
+    <div class="backdrop" id="backdrop"></div>
+
+    <!-- ==================== MAIN ==================== -->
+    <main class="main">
+
+        <header class="top-bar">
+            <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="top-bar-title">
+                <h1>{{ candidate.name|default:"AI Representative" }}'s AI Representative</h1>
+                <p>
+                    <span class="live-dot"></span>
+                    Ask questions about the candidate
+                </p>
+            </div>
+
+            <div class="top-bar-actions">
+                {% if candidate.github_url %}
+                <a class="icon-link" href="{{ candidate.github_url }}" target="_blank" rel="noopener" title="GitHub">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.29 9.43 7.86 10.95.58.1.79-.25.79-.55v-2.1c-3.2.7-3.88-1.36-3.88-1.36-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.74-1.56-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.47.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.9-.38 2.88-.39.98 0 1.96.13 2.88.39 2.2-1.5 3.17-1.18 3.17-1.18.63 1.58.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.13v3.16c0 .3.2.66.79.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
+                    </svg>
+                </a>
+                {% endif %}
+                <span class="lang-pill">
+                    <span class="lang-globe">🌐</span>
+                    <span>English</span>
+                </span>
+            </div>
+        </header>
+
+        <div class="chat-scroll" id="chatScroll">
+
+            <!-- ===== Welcome block ===== -->
+            <section class="welcome" id="welcome">
+                <div class="welcome-avatar-wrap">
+                    <div class="welcome-avatar-glow"></div>
+                    <div class="welcome-avatar">
+                        <img src="{% static candidate.avatar_path|default:'images/avatar.png' %}"
+                             alt="{{ candidate.name }}"
+                             onerror="this.style.display='none'; this.parentNode.classList.add('no-img');">
+                        <span class="welcome-initial">{{ candidate.name|slice:":1"|default:"A" }}</span>
+                    </div>
+                    <span class="welcome-online-dot"></span>
+                </div>
+
+                <h2>Hi, I'm {{ candidate.name|default:"the candidate" }}'s AI rep.</h2>
+                <p class="welcome-sub">
+                    I can answer questions about my experience, projects, skills and technical background —
+                    straight from my resume, with no fluff.
+                </p>
+
+                {% if candidate.headline or candidate.location %}
+                <div class="welcome-meta">
+                    {% if candidate.headline %}
+                    <span class="meta-pill">💼 {{ candidate.headline }}</span>
+                    {% endif %}
+                    {% if candidate.location %}
+                    <span class="meta-pill">📍 {{ candidate.location }}</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <div class="suggestion-grid">
+                    <button class="suggestion-card" data-q="Tell me about yourself.">
+                        <span class="sc-icon">👋</span>
+                        <span class="sc-title">Tell me about yourself</span>
+                        <span class="sc-sub">A quick intro from my resume</span>
+                    </button>
+                    <button class="suggestion-card" data-q="What technical skills do you have?">
+                        <span class="sc-icon">🧠</span>
+                        <span class="sc-title">What are your technical skills?</span>
+                        <span class="sc-sub">Languages, frameworks, tools</span>
+                    </button>
+                    <button class="suggestion-card" data-q="Explain your strongest project in detail.">
+                        <span class="sc-icon">🚀</span>
+                        <span class="sc-title">Explain your strongest project</span>
+                        <span class="sc-sub">Deep-dive into one project</span>
+                    </button>
+                    <button class="suggestion-card" data-q="What technologies have you worked with?">
+                        <span class="sc-icon">🛠</span>
+                        <span class="sc-title">Technologies you've used</span>
+                        <span class="sc-sub">Stack and tooling overview</span>
+                    </button>
+                    <button class="suggestion-card" data-q="Why should we hire you?">
+                        <span class="sc-icon">✨</span>
+                        <span class="sc-title">Why should we hire you?</span>
+                        <span class="sc-sub">Strengths and fit</span>
+                    </button>
+                    <button class="suggestion-card" data-q="What are your strongest technical areas?">
+                        <span class="sc-icon">⚡</span>
+                        <span class="sc-title">Strongest technical areas</span>
+                        <span class="sc-sub">Where I shine the most</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- ===== Messages ===== -->
+            <div class="messages" id="messages"></div>
+
+        </div>
+
+        <!-- ===== Input bar ===== -->
+        <div class="input-wrap">
+            <form class="input-bar" id="chatForm" autocomplete="off">
+                <textarea
+                    id="questionInput"
+                    placeholder="Ask anything about {{ candidate.name|default:'the candidate' }}…"
+                    rows="1"
+                    maxlength="2000"></textarea>
+                <div class="input-actions">
+                    <span class="char-counter" id="charCounter"></span>
+                    <button type="submit" class="send-btn" id="sendBtn" aria-label="Send message">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <polyline points="5 12 12 5 19 12"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+            <div class="input-hint">
+                Press <kbd>Enter</kbd> to send · <kbd>Shift</kbd>+<kbd>Enter</kbd> for newline ·
+                Answers are generated only from the candidate's resume
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- CSRF -->
+<form id="csrfHolder" style="display:none;">{% csrf_token %}</form>
+
+<script src="{% static 'js/chat.js' %}"></script>
+</body>
+</html>
